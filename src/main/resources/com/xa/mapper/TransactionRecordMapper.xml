@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xa.mapper.TransactionRecordMapper">
+
+    <insert id="insert">
+        insert into transactionRecord
+        <trim prefix="(" suffix=")" prefixOverrides=",">
+            <if test="cardNo != null and cardNo != ''">
+              ,cardNo
+            </if>
+            <if test="transactionDate != null">
+                ,transactionDate
+            </if>
+            <if test="transactionAmount != null">
+                ,transactionAmount
+            </if>
+            <if test="balance != null">
+                ,balance
+            </if>
+            <if test="transactionType != null and cardNo != ''">
+                ,transactionType
+            </if>
+            <if test="remark != null and remark != ''">
+                ,remark
+            </if>
+        </trim>
+
+        <trim prefix="values(" suffix=")" prefixOverrides=",">
+            <if test="cardNo != null and cardNo != ''">
+                ,#{cardNo}
+            </if>
+            <if test="transactionDate != null">
+                ,#{transactionDate}
+            </if>
+            <if test="transactionAmount != null">
+                ,#{transactionAmount}
+            </if>
+            <if test="balance != null">
+                ,#{balance}
+            </if>
+            <if test="transactionType != null and cardNo != ''">
+                ,#{transactionType}
+            </if>
+            <if test="remark != null and remark != ''">
+                ,#{remark}
+            </if>
+        </trim>
+    </insert>
+    <select id="queryByCardNo" resultType="com.xa.pojo.TransactionRecord">
+        select  id,cardNo,transactionDate,transactionAmount,balance,transactionType,remark
+        from transactionRecord
+        <where>
+            <if test="cardNo != null">
+                and cardNo = #{cardNo}
+            </if>
+            <if test="start != null and end == null">
+                and transactionDate >= #{start}
+            </if>
+            <if test="start == null and end != null">
+                and transactionDate &lt;= #{end}
+            </if>
+            <if test="start != null and end != null">
+                and transactionDate between #{start} and #{end}
+            </if>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xa.mapper.AccountMapper">
+    <update id="plusMoney">
+        update account
+        set balance = balance + #{transactionAmount}
+        where cardNo = #{cardNo}
+    </update>
+    <update id="minusMoney">
+        update account
+        set balance = balance - #{transactionAmount}
+        where cardNo = #{cardNo}
+    </update>
+
+    <select id="existsCardNo" resultType="java.lang.Integer">
+        select count(*) from account
+        where cardNo = #{cardNo}
+    </select>
+    <select id="queryByCardNoPwd" resultType="com.xa.pojo.Account">
+        select id,cardNo,status from account
+        where cardNo = #{cardNo}
+        and password = #{password};
+    </select>
+    <select id="queryBalance" resultType="java.lang.Double">
+        select balance from account where cardNo = #{cardNo}
+    </select>
+    <select id="freeZon" resultType="java.lang.Integer">
+        select count(*) from account
+        where CardNo = #{cardNo}
+        and status = 1
+    </select>
+    <select id="balanceEnough" resultType="java.lang.Integer">
+        select count(*)
+        from account
+        where cardNo = #{cardNo}
+        and #{transactionAmount}-balance &lt;= 0
+    </select>
+</mapper>
